@@ -1,8 +1,6 @@
 import Camera from "./entities/camera";
 import Employee from "./entities/NPCs/employee";
 
-import type { Position } from "./entities/camera";
-
 // import { devWorldScene } from "./scenes/dev-world"
 import * as THREE from "three";
 import LightBox from "./entities/light-box";
@@ -55,12 +53,11 @@ class GameLoop {
   }
 
   private loop(time: any): void {
-    const deltaTime: number = Math.min(this.timer.getDelta(), 0.1);
-    // Input
-
-    this.update(deltaTime);
 
     this.timer.update(time);
+    const deltaTime: number = Math.min(this.timer.getDelta(), 0.1);
+
+    this.update(deltaTime);
 
     this.render();
 

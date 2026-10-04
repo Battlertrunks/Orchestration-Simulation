@@ -1,12 +1,6 @@
 import Character from "./characters";
 import * as THREE from "three";
-
-type PlayerState = {
-  forward: boolean;
-  backward: boolean;
-  left: boolean;
-  right: boolean;
-}
+import { type PlayerState } from "../types/player-state";
 
 export default class Player extends Character<THREE.Mesh> {
 
@@ -22,23 +16,24 @@ export default class Player extends Character<THREE.Mesh> {
     this.character = new THREE.Mesh(this.geometry, this.material);
   }
 
-  override update(deltaTime: number, currentState?: PlayerState): void {
-    if (currentState) this.moving(deltaTime, currentState)
+  override update(dt: number, state?: PlayerState): void {
+    if (!state) return;
 
+    this.moving(dt, state)
   }
 
-  private moving(deltaTime: number, currentState): void {
-    if (currentState) {
+  private moving(dt: number, state: PlayerState): void {
+    if (state) {
       this.moveDir.set(
-        (currentState.left ? 1 : 0) - (currentState.right ? 1 : 0),
+        (state.left ? 1 : 0) - (state.right ? 1 : 0),
         0,
-        (currentState.forward ? 1 : 0) - (currentState.backward ? 1 : 0)
+        (state.forward ? 1 : 0) - (state.backward ? 1 : 0)
       );
 
       if (this.moveDir.lengthSq() > 0) this.moveDir.normalize();
 
       // The delta-time math position += direction * speed * deltaTime
-      this.character.position.addScaledVector(this.moveDir, this.velocity * deltaTime);
+      this.character.position.addScaledVector(this.moveDir, this.velocity * dt);
     }
   }
 }
